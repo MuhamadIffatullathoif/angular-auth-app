@@ -1,4 +1,4 @@
-import {Component, computed, inject} from '@angular/core';
+import {Component, computed, inject, OnInit} from '@angular/core';
 import {AuthService} from "../../../auth/services/auth.service";
 
 @Component({
@@ -6,10 +6,16 @@ import {AuthService} from "../../../auth/services/auth.service";
   templateUrl: './dashboard-layout.component.html',
   styleUrl: './dashboard-layout.component.css'
 })
-export class DashboardLayoutComponent {
+export class DashboardLayoutComponent implements OnInit{
   private authService = inject(AuthService);
   public user = computed(() => this.authService.currentUser());
+
+  ngOnInit(): void {
+
+  }
   // public get user() {
   //   return this.authService.currentUser;
   // }
+
+
 }
