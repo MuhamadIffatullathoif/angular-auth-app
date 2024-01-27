@@ -10,7 +10,7 @@ import {Router} from "@angular/router";
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.css'
 })
-export class LoginPageComponent implements OnInit{
+export class LoginPageComponent{
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -19,10 +19,6 @@ export class LoginPageComponent implements OnInit{
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]]
   });
-
-  ngOnInit(): void {
-
-  }
 
   login(): void {
     const {email, password} = this.myForm.value;

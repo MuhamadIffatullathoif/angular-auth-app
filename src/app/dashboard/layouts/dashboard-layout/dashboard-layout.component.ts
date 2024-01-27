@@ -6,16 +6,15 @@ import {AuthService} from "../../../auth/services/auth.service";
   templateUrl: './dashboard-layout.component.html',
   styleUrl: './dashboard-layout.component.css'
 })
-export class DashboardLayoutComponent implements OnInit{
+export class DashboardLayoutComponent{
   private authService = inject(AuthService);
   public user = computed(() => this.authService.currentUser());
 
-  ngOnInit(): void {
-
-  }
   // public get user() {
   //   return this.authService.currentUser;
   // }
 
-
+  onLogout(): void {
+    this.authService.logout();
+  }
 }

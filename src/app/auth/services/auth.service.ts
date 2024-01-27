@@ -2,7 +2,7 @@ import {computed, inject, Injectable, signal} from '@angular/core';
 import {environments} from "../../environments/environments";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {AuthStatus, CheckTokenResponse, LoginResponse, User} from "../interfaces";
-import {catchError, map, Observable, of, tap, throwError} from "rxjs";
+import {catchError, map, Observable, of, throwError} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,7 @@ export class AuthService {
   public authStatus = computed(() => this._authStatus());
 
   constructor() {
+    this.checkAuthStatus().subscribe();
   }
 
   private setAuthentication(user: User, token: string): boolean {
@@ -44,7 +45,10 @@ export class AuthService {
   checkAuthStatus(): Observable<boolean> {
     const url = `${this.baseUrl}/auth/check-token`;
     const token = localStorage.getItem('token');
-    if (!token) return of(false);
+    if (!token) {
+      this.logout();
+      return of(false)
+    }
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get<CheckTokenResponse>(url, {headers})
@@ -55,5 +59,11 @@ export class AuthService {
           return of(false)
         })
       )
+  }
+
+  logout(): void {
+    localStorage.removeItem("token");
+    this._currentUser.set(null);
+    this._authStatus.set(AuthStatus.notAuthenticated);
   }
 }

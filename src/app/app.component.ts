@@ -8,13 +8,9 @@ import {Router} from "@angular/router";
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit{
+export class AppComponent{
   private authService = inject(AuthService);
   private router = inject(Router);
-
-  ngOnInit(): void {
-    this.authService.checkAuthStatus().subscribe();
-  }
 
   public finishedAuthCheck = computed<boolean>(() => {
     if (this.authService.authStatus() === AuthStatus.checking) {
