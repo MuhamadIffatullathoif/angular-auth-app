@@ -2,7 +2,7 @@ import {computed, inject, Injectable, signal} from '@angular/core';
 import {environments} from "../../environments/environments";
 import {HttpClient} from "@angular/common/http";
 import {AuthStatus, LoginResponse, User} from "../interfaces";
-import {map, Observable, tap} from "rxjs";
+import {catchError, map, Observable, of, tap, throwError} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +30,11 @@ export class AuthService {
           this._authStatus.set(AuthStatus.authenticated);
           localStorage.setItem('token', token);
         }),
-        map(() => true)
+        map(() => true),
+        catchError(err => throwError(() => err.error.message))
+        // catchError((err) => {
+        //       return throwError(() => 'Something didn\'t happen as expected');
+        //     })
       );
   }
 }
